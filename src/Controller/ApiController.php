@@ -53,7 +53,9 @@ class ApiController extends AbstractController
         if ($end > $total) {
             $end = $total;
         }
+        $imageServer = 'http://via.placeholder.com/';
         for ($i = $start; $i < $end; $i ++) {
+            $imageUrl = $imageServer.rand(100, 500).'x'.rand(100,500);
             $name = '';
             if (!empty($keyword)) {
                 $name = $keyword;
@@ -69,7 +71,7 @@ class ApiController extends AbstractController
                 'name' => $name.$faker->word.$i,
                 'version' => rand(1,9).'.'.rand(0,10).'.'.rand(0,100),
                 'short_description' => $faker->paragraph,
-                'long_description' => $faker->paragraph(5),
+                'long_description' => "<p style='color: {$faker->hexColor}'>{$faker->paragraph()}</p>",
                 'price' => rand(100, 10000),
                 'downloads' => rand(0, 10000),
                 'supported_versions' => [
@@ -79,12 +81,13 @@ class ApiController extends AbstractController
                 'publish_date' => $faker->date(),
                 'update_date' => $faker->date(),
                 'size' => rand(0, 10000),
-                'license' => $license[array_rand($license)],
+                'license' => $faker->randomElement($license),
                 'author' => [
                     'name' => $faker->name,
                     'url' => $faker->url,
                 ],
-                'image' => $faker->imageUrl(),
+//                'image' => $faker->imageUrl(), server was down
+                'image' => $imageUrl,
                 'contact_url' => $faker->url,
                 'manual_url' => $faker->url,
                 'purchase_required' => $faker->boolean,
