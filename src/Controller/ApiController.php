@@ -58,6 +58,11 @@ class ApiController extends AbstractController
             if (!empty($keyword)) {
                 $name = $keyword;
             }
+            $license = [
+                'MIT',
+                'GNU',
+                $faker->word,
+            ];
             $plugin = [
                 'id' => $i+1,
                 'code' => 'Test'.$i,
@@ -74,11 +79,7 @@ class ApiController extends AbstractController
                 'publish_date' => $faker->date(),
                 'update_date' => $faker->date(),
                 'size' => rand(0, 10000),
-                'license' => array_rand([
-                    'MIT',
-                    'GNU',
-                    $faker->words(3),
-                ]),
+                'license' => $license[array_rand($license)],
                 'author' => [
                     'name' => $faker->name,
                     'url' => $faker->url,
