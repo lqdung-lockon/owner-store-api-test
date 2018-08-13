@@ -64,7 +64,7 @@ class ApiController extends AbstractController
                 'name' => $name.$faker->word.$i,
                 'version' => rand(1,9).'.'.rand(0,10).'.'.rand(0,100),
                 'short_description' => $faker->paragraph,
-                'long_description' => $faker->paragraphs(4),
+                'long_description' => $faker->paragraph(5),
                 'price' => rand(100, 10000),
                 'downloads' => rand(0, 10000),
                 'supported_versions' => [
