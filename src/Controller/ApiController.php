@@ -128,6 +128,179 @@ class ApiController extends AbstractController
 
     /**
      * @param Request $request
+     * @Route("/plugins/recommended", name="list_recommended")
+     * @return JsonResponse
+     */
+    public function getPluginsRecommend(Request $request)
+    {
+        $faker = Factory::create();
+        $plugins = [];
+
+        $imageServer = 'http://via.placeholder.com/';
+        for ($i = 0; $i < 3; $i ++) {
+            $imageUrl = $imageServer.rand(100, 500).'x'.rand(100,500);
+            $name = '';
+            if (!empty($keyword)) {
+                $name = $keyword;
+            }
+            $license = [
+                'MIT',
+                'GNU',
+                $faker->word,
+            ];
+            $plugin = [
+                'id' => $i+1,
+                'code' => 'Test'.$i,
+                'name' => $name.$faker->word.$i,
+                'version' => rand(1,9).'.'.rand(0,10).'.'.rand(0,100),
+                'short_description' => $faker->paragraph,
+                'long_description' => "<p style='color: {$faker->hexColor}'>{$faker->paragraph()}</p>",
+                'price' => rand(100, 10000),
+                'downloads' => rand(0, 10000),
+                'supported_versions' => [
+                    rand(1,9).'.'.rand(0,10).'.'.rand(0,100),
+                    rand(1,9).'.'.rand(0,10).'.'.rand(0,100),
+                ],
+                'publish_date' => $faker->date(),
+                'update_date' => $faker->date(),
+                'size' => rand(0, 10000),
+                'license' => $faker->randomElement($license),
+                'author' => [
+                    'name' => $faker->name,
+                    'url' => $faker->url,
+                ],
+//                'image' => $faker->imageUrl(), server was down
+                'image' => $imageUrl,
+                'contact_url' => $faker->url,
+                'manual_url' => $faker->url,
+                'purchase_required' => $faker->boolean,
+                'purchased' => $faker->boolean,
+                'store_url' => $faker->url,
+            ];
+
+            $plugins[] = $plugin;
+        }
+
+
+        return $this->json($plugins);
+    }
+
+    /**
+     * @param Request $request
+     * @Route("/plugins/purchased", name="list_purchased")
+     * @return JsonResponse
+     */
+    public function getPluginsPurchased(Request $request)
+    {
+        $faker = Factory::create();
+        $plugins = [];
+
+        $imageServer = 'http://via.placeholder.com/';
+        for ($i = 0; $i < $faker->numberBetween(1, 20); $i ++) {
+            $imageUrl = $imageServer.rand(100, 500).'x'.rand(100,500);
+            $name = '';
+            if (!empty($keyword)) {
+                $name = $keyword;
+            }
+            $license = [
+                'MIT',
+                'GNU',
+                $faker->word,
+            ];
+            $plugin = [
+                'id' => $i+1,
+                'code' => 'Test'.$i,
+                'name' => $name.$faker->word.$i,
+                'version' => rand(1,9).'.'.rand(0,10).'.'.rand(0,100),
+                'short_description' => $faker->paragraph,
+                'long_description' => "<p style='color: {$faker->hexColor}'>{$faker->paragraph()}</p>",
+                'price' => rand(100, 10000),
+                'downloads' => rand(0, 10000),
+                'supported_versions' => [
+                    rand(1,9).'.'.rand(0,10).'.'.rand(0,100),
+                    rand(1,9).'.'.rand(0,10).'.'.rand(0,100),
+                ],
+                'publish_date' => $faker->date(),
+                'update_date' => $faker->date(),
+                'size' => rand(0, 10000),
+                'license' => $faker->randomElement($license),
+                'author' => [
+                    'name' => $faker->name,
+                    'url' => $faker->url,
+                ],
+//                'image' => $faker->imageUrl(), server was down
+                'image' => $imageUrl,
+                'contact_url' => $faker->url,
+                'manual_url' => $faker->url,
+                'purchase_required' => $faker->boolean,
+                'purchased' => $faker->boolean,
+                'store_url' => $faker->url,
+            ];
+
+            $plugins[] = $plugin;
+        }
+
+
+        return $this->json($plugins);
+    }
+
+    /**
+     * @param Request $request
+     * @param string $key
+     * @Route("/plugin/{key}", name="plugin")
+     * @return JsonResponse
+     */
+    public function getPlugin(Request $request, $key)
+    {
+        $faker = Factory::create();
+        $code = $key;
+        $id = null;
+        if (is_numeric($key)) {
+            $id = $key;
+            $code = null;
+        }
+
+        $imageServer = 'http://via.placeholder.com/';
+        $imageUrl = $imageServer.rand(100, 500).'x'.rand(100,500);
+        $license = [
+            'MIT',
+            'GNU',
+            $faker->word,
+        ];
+        $plugin = [
+            'id' => is_null($id) ? $faker->numberBetween(1, 100) : $id,
+            'code' => is_null($code) ? "TestCode" : $code,
+            'name' => $faker->word . $id,
+            'version' => rand(1,9).'.'.rand(0,10).'.'.rand(0,100),
+            'short_description' => $faker->paragraph,
+            'long_description' => "<p style='color: {$faker->hexColor}'>{$faker->paragraph()}</p>",
+            'price' => rand(100, 10000),
+            'downloads' => rand(0, 10000),
+            'supported_versions' => [
+                rand(1,9).'.'.rand(0,10).'.'.rand(0,100),
+                rand(1,9).'.'.rand(0,10).'.'.rand(0,100),
+            ],
+            'publish_date' => $faker->date(),
+            'update_date' => $faker->date(),
+            'size' => rand(0, 10000),
+            'license' => $faker->randomElement($license),
+            'author' => [
+                'name' => $faker->name,
+                'url' => $faker->url,
+            ],
+            'image' => $imageUrl,
+            'contact_url' => $faker->url,
+            'manual_url' => $faker->url,
+            'purchase_required' => $faker->boolean,
+            'purchased' => $faker->boolean,
+            'store_url' => $faker->url,
+        ];
+
+        return $this->json($plugin);
+    }
+
+    /**
+     * @param Request $request
      * @Route("/category", name="category")
      * @return JsonResponse
      */
@@ -144,6 +317,53 @@ class ApiController extends AbstractController
         }
 
         return $this->json($data);
+    }
+
+    /**
+     * @param Request $request
+     * @Route("/api_key", name="api_key")
+     * @return JsonResponse
+     */
+    public function postApiKey(Request $request)
+    {
+        $captcha = $request->get('captcha');
+        $eccube_url = $request->get('eccube_url');
+        $eccube_version = $request->get('eccube_version');
+
+        $string = $captcha . $eccube_url . $eccube_version;
+        $result = preg_replace("/[^a-zA-Z0-9]+/", "", $string);
+
+        if (strlen($result) < 40) {
+            $result = self::random(40);
+        } else {
+            $result = substr($result, 0, 40);
+        }
+
+        $data['api_key'] = $result;
+
+        return $this->json($data);
+    }
+
+    public static function random($length = 16)
+    {
+        if (function_exists('openssl_random_pseudo_bytes')) {
+            $bytes = openssl_random_pseudo_bytes($length * 2);
+
+            if ($bytes === false) {
+                throw new \RuntimeException('Unable to generate random string.');
+            }
+
+            return substr(str_replace(['/', '+', '='], '', base64_encode($bytes)), 0, $length);
+        }
+
+        return static::quickRandom($length);
+    }
+
+    public static function quickRandom($length = 16)
+    {
+        $pool = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
+        return substr(str_shuffle(str_repeat($pool, $length)), 0, $length);
     }
 
     /**
