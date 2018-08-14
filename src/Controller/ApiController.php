@@ -11,8 +11,10 @@ namespace App\Controller;
 
 use Faker\Factory;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Routing\Annotation\Route;
 
 class ApiController extends AbstractController
@@ -317,6 +319,24 @@ class ApiController extends AbstractController
         }
 
         return $this->json($data);
+    }
+
+    /**
+     * @param Request $request
+     * @Route("/captcha", name="captcha")
+     * @return BinaryFileResponse
+     */
+    public function getCaptcha(Request $request)
+    {
+        $file = __DIR__ . '/../../captcha.PNG';
+//        $Image = imagecreatefrompng($file);
+
+        $response = new BinaryFileResponse($file);
+//        $disposition = $response->headers->makeDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $filename);
+//        $response->headers->set('Content-Disposition', $disposition);
+        $response->headers->set('Content-Type', 'image/png');
+
+        return $response;
     }
 
     /**
